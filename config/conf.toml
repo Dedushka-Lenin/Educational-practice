@@ -1,0 +1,8 @@
+[app]
+    project_name = "My app"
+    version = "1.0.0"
+    debug = true
+    cors_allowed_origins = "http://localhost:3000"
+
+[database]
+    db_path = "db/app.db"
