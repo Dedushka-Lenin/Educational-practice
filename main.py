@@ -1,7 +1,5 @@
 import sys
-import os
 import signal
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import sqlite3
 import uvicorn
