@@ -16,19 +16,16 @@ for filename in os.listdir(folder_path):
         
         with open(file_path, 'r', encoding='utf-8') as f:
             reader = csv.reader(f)
-            headers = next(reader)  # читаем заголовки без 'id'
+            headers = next(reader)
             
-            # Создаём список колонок, добавляя 'id' как автоинкрементный первичный ключ
             columns = ['"id" INTEGER PRIMARY KEY AUTOINCREMENT']
             for header in headers:
                 columns.append(f'"{header}" TEXT')
             columns_sql = ', '.join(columns)
-            
-            # Создаем таблицу
+     
             create_table_sql = f'CREATE TABLE IF NOT EXISTS "{table_name}" ({columns_sql});'
             cursor.execute(create_table_sql)
-            
-            # Вставляем данные без 'id' — он создастся автоматически
+
             for row in reader:
                 columns_list = [f'"{h}"' for h in headers]
                 columns_str = ', '.join(columns_list)
