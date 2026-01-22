@@ -1,4 +1,4 @@
-requestID;startDate;climateTechType;climateTechModel;problemDescryption;requestStatus;completionDate;repairParts;masterID;clientID
+id;startDate;climateTechType;climateTechModel;problemDescryption;requestStatus;completionDate;repairParts;masterID;clientID
 1;2023-06-06;Кондиционер;TCL TAC-12CHSA/TPG-W белый;Не охлаждает воздух;В процессе ремонта;null;;2;7
 2;2023-05-05;Кондиционер;Electrolux EACS/I-09HAT/N3_21Y белый;Выключается сам по себе;В процессе ремонта;null;;3;8
 3;2022-07-07;Увлажнитель воздуха;Xiaomi Smart Humidifier 2;Пар имеет неприятный запах;Готова к выдаче;2023-01-01;;3;9

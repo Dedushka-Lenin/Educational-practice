@@ -29,7 +29,7 @@ class Server:
                 version=conf.api.version
             )
 
-            routes = get_apps_router(self.conn, self.cursor)
+            routes = get_apps_router(self.conn, self.cursor, conf.token)
             application.include_router(routes)
 
             application.add_middleware(

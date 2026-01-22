@@ -8,7 +8,7 @@
 
 ```bash
 git clone https://github.com/Dedushka-Lenin/Educational-practice
-cd Educational-practice
+cd Educational-practice/second_week
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows

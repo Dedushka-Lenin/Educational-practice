@@ -6,3 +6,8 @@
 
 [database]
     db_path = "db/app.db"
+
+[token]
+    secret_key = "goida"
+    algorithm = "HS256"
+    token_expire_seconds = 3000000

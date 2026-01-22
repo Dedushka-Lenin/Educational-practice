@@ -1,40 +1,35 @@
 from fastapi import APIRouter
 
-from internal.adapter.repo.material_type_repo import MaterialTypeRepo
-from internal.adapter.repo.product_type_repo import ProductTypeRepo
-from second_week.internal.adapter.repo.data_comments_repo import ProductWorkshopsRepo
-from second_week.internal.adapter.repo.data_requests_repo import ProductsRepo
-from second_week.internal.adapter.repo.data_users_repo import WorkshopRepo
+from internal.adapter.repo.comments_repo import CommentsRepo
+from internal.adapter.repo.requests_repo import RequestsRepo
+from internal.adapter.repo.token_repo import TokenRepo
+from internal.adapter.repo.users_repo import UsersRepo
  
-from second_week.internal.api.data_comments import MaterialType
-from second_week.internal.api.data_requests import ProductType
-from second_week.internal.api.data_users import ProductWorkshops
-from internal.api.products import Products
-from internal.api.workshop import Workshop
+from internal.api.comments import Comments
+from internal.api.requests import Requests
+from internal.api.users import Users
+
+from internal.adapter.token.token import TokenManager
+from internal.adapter.config.config import TokenConfig  
 
 
-def get_apps_router(conn, cursor) -> APIRouter:
+def get_apps_router(conn, cursor, token_conf: TokenConfig) -> APIRouter:
+
+    token_repo = TokenRepo(conn, cursor)
+    token_manager = TokenManager(token_conf, token_repo)
     
-    mtr = MaterialTypeRepo(conn, cursor)
-    material_type = MaterialType(mtr).get_router()
+    requests_repo = RequestsRepo(conn, cursor)
+    requests = Requests(requests_repo, token_manager).get_router()
 
-    ptr = ProductTypeRepo(conn, cursor)
-    product_type = ProductType(ptr).get_router()
+    comments_repo = CommentsRepo(conn, cursor)
+    comments = Comments(comments_repo, requests_repo, token_manager).get_router()
 
-    pwr = ProductWorkshopsRepo(conn, cursor)
-    product_workshops = ProductWorkshops(pwr).get_router()
-
-    pr = ProductsRepo(conn, cursor)
-    products = Products(pr).get_router()
-
-    wr = WorkshopRepo(conn, cursor)
-    workshop = Workshop(wr).get_router()
+    users_repo = UsersRepo(conn, cursor)
+    users = Users(users_repo, token_manager).get_router()
 
     router = APIRouter()
-    router.include_router(material_type, prefix="/material_type", tags=["material_type"])
-    router.include_router(product_type, prefix="/product_type", tags=["product_type"])
-    router.include_router(product_workshops, prefix="/product_workshops", tags=["product_workshops"])
-    router.include_router(products, prefix="/products", tags=["products"])
-    router.include_router(workshop, prefix="/workshop", tags=["workshop"])
+    router.include_router(comments, prefix="/comments", tags=["comments"])
+    router.include_router(requests, prefix="/requests", tags=["requests"])
+    router.include_router(users, prefix="/users", tags=["users"])
 
     return router

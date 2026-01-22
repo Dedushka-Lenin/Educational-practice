@@ -1,25 +1,32 @@
 import sqlite3
 
-from internal.adapter.repo.sql_queries import workshop_query
+from internal.adapter.repo.sql_queries import users_query
 
 
-class WorkshopRepo:
+class UsersRepo:
     def __init__(self, conn: sqlite3.Connection, cursor: sqlite3.Cursor):
-        self.query = workshop_query()
+        self.query = users_query()
 
         self.conn = conn
         self.cursor = cursor
 
-    def create(self, workshop_name: str, workshop_type: str, number_people_production: str):
-        values = (workshop_name, workshop_type, number_people_production)
+    def create(self, fio: str, phone: int, login: str, password: str, type: str):
+        values = (fio, phone, login, password, type)
         self.cursor.execute(self.query.create, values)
         self.conn.commit()
         return self.cursor.lastrowid
 
-    def get(self, item_id):
+    def get(self, item_id) -> dict:
         self.cursor.execute(
             self.query.get,
             (item_id,)
+        )
+        return self.cursor.fetchone()
+    
+    def get_for_login(self, login) -> dict:
+        self.cursor.execute(
+            self.query.get_for_login,
+            (login,)
         )
         return self.cursor.fetchone()
 
@@ -32,6 +39,13 @@ class WorkshopRepo:
         self.cursor.execute(
             self.query.check,
             (item_id,)
+        )
+        return self.cursor.fetchone() is not None
+    
+    def check_login(self, login):
+        self.cursor.execute(
+            self.query.check_login,
+            (login,)
         )
         return self.cursor.fetchone() is not None
 

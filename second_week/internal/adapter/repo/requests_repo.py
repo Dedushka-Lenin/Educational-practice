@@ -1,16 +1,16 @@
 import sqlite3
 
-from internal.adapter.repo.sql_queries import products_query
+from internal.adapter.repo.sql_queries import requests_query
 
-class ProductsRepo:
+class RequestsRepo:
     def __init__(self, conn: sqlite3.Connection, cursor: sqlite3.Cursor):
-        self.query = products_query()
+        self.query = requests_query()
 
         self.conn = conn
         self.cursor = cursor
 
-    def create(self, product_type: str, product_name: str, part_number: str, minimum_partner_cost: str, primary_material: str):
-        values = (product_type, product_name, part_number, minimum_partner_cost, primary_material)
+    def create(self, startDate: str, climateTechType: str, climateTechModel: str, problemDescryption: str, requestStatus: str, completionDate: str, repairParts: str, masterID: int, clientID: int):
+        values = (startDate, climateTechType, climateTechModel, problemDescryption, requestStatus, completionDate, repairParts, masterID, clientID)
         self.cursor.execute(self.query.create, values)
         self.conn.commit()
         return self.cursor.lastrowid

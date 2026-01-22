@@ -1,16 +1,16 @@
 import sqlite3
 
-from internal.adapter.repo.sql_queries import product_workshops_query
+from internal.adapter.repo.sql_queries import comments_query
 
-class ProductWorkshopsRepo:
+class CommentsRepo:
     def __init__(self, conn: sqlite3.Connection, cursor: sqlite3.Cursor):
-        self.query = product_workshops_query()
+        self.query = comments_query()
 
         self.conn = conn
         self.cursor = cursor
 
-    def create(self, product_name: str, workshop_name: str, manufacturing_time_h: str):
-        values = (product_name, workshop_name, manufacturing_time_h)
+    def create(self, message: str, masterID: int, requestID: int):
+        values = (message, masterID, requestID)
         self.cursor.execute(self.query.create, values)
         self.conn.commit()
         return self.cursor.lastrowid
