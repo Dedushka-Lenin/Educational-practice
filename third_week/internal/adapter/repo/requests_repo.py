@@ -1,0 +1,43 @@
+import sqlite3
+
+from internal.adapter.repo.sql_queries import requests_query
+
+class RequestsRepo:
+    def __init__(self, conn: sqlite3.Connection, cursor: sqlite3.Cursor):
+        self.query = requests_query()
+
+        self.conn = conn
+        self.cursor = cursor
+
+    def create(self, startDate: str, homeTechType: str, homeTechModel: str, problemDescryption: str, requestStatus: str, completionDate: str, repairParts: str, masterID: int, clientID: int):
+        values = (startDate, homeTechType, homeTechModel, problemDescryption, requestStatus, completionDate, repairParts, masterID, clientID)
+        self.cursor.execute(self.query.create, values)
+        self.conn.commit()
+        return self.cursor.lastrowid
+
+    def get(self, item_id):
+        self.cursor.execute(
+            self.query.get,
+            (item_id,)
+        )
+        return self.cursor.fetchone()
+
+    def get_list(self):
+        self.cursor.execute(self.query.get_list)
+        result = [dict(row) for row in self.cursor.fetchall()]
+        return result
+
+    def check(self, item_id):
+        self.cursor.execute(
+            self.query.check,
+            (item_id,)
+        )
+        return self.cursor.fetchone() is not None
+
+    def delete(self, item_id):
+        self.cursor.execute(
+            self.query.delete,
+            (item_id,)
+        )
+        self.conn.commit()
+        return self.cursor.rowcount > 0
